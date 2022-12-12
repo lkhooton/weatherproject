@@ -3,7 +3,6 @@ const form = document.querySelector(".top-banner form");
 const input = document.querySelector(".top-banner input");
 const msg = document.querySelector(".top-banner .msg");
 const list = document.querySelector(".ajax-section .cities");
-/* SUBSCRIBE HERE FOR API KEY: https://home.openweathermap.org/users/sign_up */
 const apiKey = "7bc0330db76ee3d0bf2e016ca55345ec";
 
 form.addEventListener("submit", e => {
@@ -17,9 +16,8 @@ form.addEventListener("submit", e => {
   if (listItemsArray.length > 0) {
     const filteredArray = listItemsArray.filter(el => {
       let content = "";
-      //athens,gr
+      
       if (inputVal.includes(",")) {
-        //athens,grrrrrr->invalid country code, so we keep only the first part of inputVal
         if (inputVal.split(",")[1].length > 2) {
           inputVal = inputVal.split(",")[0];
           content = el
@@ -29,7 +27,6 @@ form.addEventListener("submit", e => {
           content = el.querySelector(".city-name").dataset.name.toLowerCase();
         }
       } else {
-        //athens
         content = el.querySelector(".city-name span").textContent.toLowerCase();
       }
       return content == inputVal.toLowerCase();
@@ -46,7 +43,7 @@ form.addEventListener("submit", e => {
   }
 
   //ajax here
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=metric`;
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${inputVal}&appid=${apiKey}&units=imperial`;
 
   fetch(url)
     .then(response => response.json())
@@ -63,7 +60,7 @@ form.addEventListener("submit", e => {
           <span>${name}</span>
           <sup>${sys.country}</sup>
         </h2>
-        <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
+        <div class="city-temp">${Math.round(main.temp)}<sup>°F</sup></div>
         <figure>
           <img class="city-icon" src="${icon}" alt="${
         weather[0]["description"]
@@ -75,7 +72,7 @@ form.addEventListener("submit", e => {
       list.appendChild(li);
     })
     .catch(() => {
-      msg.textContent = "Please search for a valid city 😩";
+      msg.textContent = "Please search for a valid city";
     });
 
   msg.textContent = "";
